@@ -19,8 +19,17 @@ export const createDataLoaders = (prisma: PrismaClient) => {
     return ids.map((id) => memberTypes.find((memberType) => memberType.id === id));
   };
 
+  const batchPostsByUserId = async (ids: readonly string[]) => {
+    const posts = await prisma.post.findMany({
+      where: { authorId: { in: ids as string[] } },
+    });
+
+    return ids.map((id) => posts.filter((post) => post.authorId === id));
+  };
+
   return {
     profileByUserIdLoader: new DataLoader(batchProfileByUserId),
     memberTypeLoader: new DataLoader(batchMemberType),
+    postsByUserIdLoader: new DataLoader(batchPostsByUserId),
   };
 };
