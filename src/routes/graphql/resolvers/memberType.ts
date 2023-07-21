@@ -1,9 +1,21 @@
-import { Context, NoArgs } from '../types/share.js';
+import { Context, Args } from '../types/share.js';
 
-const getMemberTypes = async (_args: NoArgs, { prisma }: Context) => {
+export const getMemberType = async (
+  { id }: Args<{ id: string }>,
+  { prisma }: Context,
+) => {
+  return await prisma.memberType.findUnique({
+    where: {
+      id,
+    },
+  });
+};
+
+const getMemberTypes = async (_args: Args, { prisma }: Context) => {
   return await prisma.memberType.findMany();
 };
 
 export default {
+  memberType: getMemberType,
   memberTypes: getMemberTypes,
 };
