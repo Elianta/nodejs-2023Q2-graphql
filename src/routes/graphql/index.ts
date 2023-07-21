@@ -5,8 +5,11 @@ import memberTypeResolver from './resolvers/memberType.js';
 import postResolver from './resolvers/post.js';
 import userResolver from './resolvers/user.js';
 import profileResolver from './resolvers/profile.js';
+import { createDataLoaders } from './dataLoaders.js';
 
 const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
+  const dataLoaders = createDataLoaders(fastify.prisma);
+
   fastify.route({
     url: '/',
     method: 'POST',
@@ -27,7 +30,7 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
           ...profileResolver,
         },
         variableValues: req.body.variables,
-        contextValue: { prisma: fastify.prisma },
+        contextValue: { prisma: fastify.prisma, ...dataLoaders },
       });
     },
   });
