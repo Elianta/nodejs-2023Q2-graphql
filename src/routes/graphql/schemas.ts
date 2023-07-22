@@ -1,5 +1,11 @@
 import { Type } from '@fastify/type-provider-typebox';
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema } from 'graphql';
+import {
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
+} from 'graphql';
 import { changeUserInputType, createUserInputType, userType } from './types/user.js';
 import { memberType, memberTypeId } from './types/memberType.js';
 import { changePostInputType, createPostInputType, postType } from './types/post.js';
@@ -131,6 +137,20 @@ const mutationType = new GraphQLObjectType({
       args: {
         id: { type: new GraphQLNonNull(UUIDType) },
         dto: { type: changeProfileInputType },
+      },
+    },
+    subscribeTo: {
+      type: userType,
+      args: {
+        userId: { type: new GraphQLNonNull(UUIDType) },
+        authorId: { type: new GraphQLNonNull(UUIDType) },
+      },
+    },
+    unsubscribeFrom: {
+      type: GraphQLString,
+      args: {
+        userId: { type: new GraphQLNonNull(UUIDType) },
+        authorId: { type: new GraphQLNonNull(UUIDType) },
       },
     },
   },

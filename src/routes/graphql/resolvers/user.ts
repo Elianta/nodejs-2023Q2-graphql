@@ -25,10 +25,31 @@ const changeUser = async (
   return await prisma.user.update({ where: { id }, data: dto });
 };
 
+const subscribeTo = async (
+  { userId, authorId }: Args<{ userId: string; authorId: string }>,
+  { prisma }: Context,
+) => {
+  return prisma.user.update({
+    where: { id: userId },
+    data: { userSubscribedTo: { create: { authorId } } },
+  });
+};
+
+const unsubscribeFrom = async (
+  { userId, authorId }: Args<{ userId: string; authorId: string }>,
+  { prisma }: Context,
+) => {
+  await prisma.subscribersOnAuthors.delete({
+    where: { subscriberId_authorId: { subscriberId: userId, authorId } },
+  });
+};
+
 export default {
   user: getUser,
   users: getUsers,
   createUser,
   deleteUser,
   changeUser,
+  subscribeTo,
+  unsubscribeFrom,
 };
