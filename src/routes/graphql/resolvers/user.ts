@@ -18,9 +18,17 @@ const deleteUser = async ({ id }: Args<{ id: string }>, { prisma }: Context) => 
   return id;
 };
 
+const changeUser = async (
+  { id, dto }: Args<{ id: string; dto: Partial<IUserInput> }>,
+  { prisma }: Context,
+) => {
+  return await prisma.user.update({ where: { id }, data: dto });
+};
+
 export default {
   user: getUser,
   users: getUsers,
   createUser,
   deleteUser,
+  changeUser,
 };

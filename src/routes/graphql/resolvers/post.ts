@@ -18,9 +18,20 @@ const deletePost = async ({ id }: Args<{ id: string }>, { prisma }: Context) => 
   return id;
 };
 
+const changePost = async (
+  { id, dto }: Args<{ id: string; dto: IPostInput }>,
+  { prisma }: Context,
+) => {
+  return await prisma.post.update({
+    where: { id },
+    data: dto,
+  });
+};
+
 export default {
   post: getPost,
   posts: getPosts,
   createPost,
   deletePost,
+  changePost,
 };
