@@ -90,6 +90,24 @@ const mutationType = new GraphQLObjectType({
         dto: { type: createProfileInputType },
       },
     },
+    deleteUser: {
+      type: UUIDType,
+      args: {
+        id: { type: new GraphQLNonNull(UUIDType) },
+      },
+    },
+    deletePost: {
+      type: UUIDType,
+      args: {
+        id: { type: new GraphQLNonNull(UUIDType) },
+      },
+    },
+    deleteProfile: {
+      type: UUIDType,
+      args: {
+        id: { type: new GraphQLNonNull(UUIDType) },
+      },
+    },
   },
 });
 

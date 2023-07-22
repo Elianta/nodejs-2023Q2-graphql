@@ -13,8 +13,14 @@ const createPost = async ({ dto }: Args<{ dto: IPostInput }>, { prisma }: Contex
   return await prisma.post.create({ data: dto });
 };
 
+const deletePost = async ({ id }: Args<{ id: string }>, { prisma }: Context) => {
+  await prisma.post.delete({ where: { id } });
+  return id;
+};
+
 export default {
   post: getPost,
   posts: getPosts,
   createPost,
+  deletePost,
 };

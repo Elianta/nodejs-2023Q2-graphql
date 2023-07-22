@@ -13,8 +13,14 @@ const createUser = async ({ dto }: Args<{ dto: IUserInput }>, { prisma }: Contex
   return await prisma.user.create({ data: dto });
 };
 
+const deleteUser = async ({ id }: Args<{ id: string }>, { prisma }: Context) => {
+  await prisma.user.delete({ where: { id } });
+  return id;
+};
+
 export default {
   user: getUser,
   users: getUsers,
   createUser,
+  deleteUser,
 };

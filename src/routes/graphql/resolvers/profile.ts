@@ -16,8 +16,14 @@ const createProfile = async (
   return await prisma.profile.create({ data: dto });
 };
 
+const deleteProfile = async ({ id }: Args<{ id: string }>, { prisma }: Context) => {
+  await prisma.profile.delete({ where: { id } });
+  return id;
+};
+
 export default {
   profile: getProfile,
   profiles: getProfiles,
   createProfile,
+  deleteProfile,
 };
