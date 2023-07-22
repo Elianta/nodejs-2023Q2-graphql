@@ -1,9 +1,9 @@
 import { Type } from '@fastify/type-provider-typebox';
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema } from 'graphql';
-import { userType } from './types/user.js';
+import { createUserInputType, userType } from './types/user.js';
 import { memberType, memberTypeId } from './types/memberType.js';
-import { postType } from './types/post.js';
-import { profileType } from './types/profile.js';
+import { createPostInputType, postType } from './types/post.js';
+import { createProfileInputType, profileType } from './types/profile.js';
 import { UUIDType } from './types/uuid.js';
 
 export const gqlResponseSchema = Type.Partial(
@@ -27,7 +27,7 @@ export const createGqlResponseSchema = {
 
 const queryType = new GraphQLObjectType({
   name: 'Query',
-  fields: () => ({
+  fields: {
     user: {
       type: userType,
       args: {
@@ -66,7 +66,31 @@ const queryType = new GraphQLObjectType({
     profiles: {
       type: new GraphQLList(profileType),
     },
-  }),
+  },
 });
 
-export const gqlSchema = new GraphQLSchema({ query: queryType });
+const mutationType = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    createUser: {
+      type: userType,
+      args: {
+        dto: { type: createUserInputType },
+      },
+    },
+    createPost: {
+      type: postType,
+      args: {
+        dto: { type: createPostInputType },
+      },
+    },
+    createProfile: {
+      type: profileType,
+      args: {
+        dto: { type: createProfileInputType },
+      },
+    },
+  },
+});
+
+export const gqlSchema = new GraphQLSchema({ query: queryType, mutation: mutationType });

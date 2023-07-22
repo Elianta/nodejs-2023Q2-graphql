@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { createDataLoaders } from '../dataLoaders.js';
 
-export type Args<T = never> = {
+export type Args<T = unknown> = {
   [k in keyof T]: T[k];
 };
 

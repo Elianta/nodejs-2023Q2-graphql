@@ -1,5 +1,6 @@
 import {
   GraphQLFloat,
+  GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -10,13 +11,17 @@ import { profileType } from './profile.js';
 import { Context } from './share.js';
 import { postType } from './post.js';
 
+export interface IUserInput {
+  name: string;
+  balance: number;
+}
 export interface IUser {
   id: string;
   name: string;
   balance: number;
 }
 
-export const userType = new GraphQLObjectType({
+export const userType: GraphQLObjectType<IUser, Context> = new GraphQLObjectType({
   name: 'User',
   fields: () => ({
     id: { type: new GraphQLNonNull(UUIDType) },
@@ -47,4 +52,12 @@ export const userType = new GraphQLObjectType({
       },
     },
   }),
+});
+
+export const createUserInputType = new GraphQLInputObjectType({
+  name: 'CreateUserInput',
+  fields: {
+    name: { type: new GraphQLNonNull(GraphQLString) },
+    balance: { type: new GraphQLNonNull(GraphQLFloat) },
+  },
 });

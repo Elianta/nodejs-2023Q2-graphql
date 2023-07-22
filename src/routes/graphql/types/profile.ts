@@ -1,8 +1,22 @@
-import { GraphQLBoolean, GraphQLInt, GraphQLObjectType } from 'graphql';
+import {
+  GraphQLBoolean,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
 import { UUIDType } from './uuid.js';
-import { memberType } from './memberType.js';
+import { memberType, memberTypeId } from './memberType.js';
 import { Context } from './share.js';
 import { MemberTypeId } from '../types/memberType.js';
+
+export interface IProfileInput {
+  userId: string;
+  isMale: boolean;
+  yearOfBirth: number;
+  memberTypeId: MemberTypeId;
+}
 
 export interface IProfile {
   id: string;
@@ -25,4 +39,14 @@ export const profileType = new GraphQLObjectType({
       },
     },
   }),
+});
+
+export const createProfileInputType = new GraphQLInputObjectType({
+  name: 'CreateProfileInput',
+  fields: {
+    userId: { type: new GraphQLNonNull(GraphQLString) },
+    memberTypeId: { type: memberTypeId },
+    isMale: { type: new GraphQLNonNull(GraphQLBoolean) },
+    yearOfBirth: { type: new GraphQLNonNull(GraphQLInt) },
+  },
 });
