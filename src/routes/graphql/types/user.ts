@@ -34,5 +34,17 @@ export const userType = new GraphQLObjectType({
         return await postsByUserIdLoader.load(parent.id);
       },
     },
+    userSubscribedTo: {
+      type: new GraphQLList(userType),
+      resolve: async (parent: IUser, _args, { userSubscribedToLoader }: Context) => {
+        return await userSubscribedToLoader.load(parent.id);
+      },
+    },
+    subscribedToUser: {
+      type: new GraphQLList(userType),
+      resolve: async (parent: IUser, _args, { subscribedToUserLoader }: Context) => {
+        return await subscribedToUserLoader.load(parent.id);
+      },
+    },
   }),
 });
