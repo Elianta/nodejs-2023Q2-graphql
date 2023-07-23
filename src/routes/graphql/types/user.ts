@@ -11,6 +11,11 @@ import { profileType } from './profile.js';
 import { Context } from './share.js';
 import { postType } from './post.js';
 
+export interface ISubscriberOnAuthor {
+  subscriberId: string;
+  authorId: string;
+}
+
 export interface IUserInput {
   name: string;
   balance: number;
@@ -19,6 +24,8 @@ export interface IUser {
   id: string;
   name: string;
   balance: number;
+  userSubscribedTo?: ISubscriberOnAuthor[];
+  subscribedToUser?: ISubscriberOnAuthor[];
 }
 
 export const userType: GraphQLObjectType<IUser, Context> = new GraphQLObjectType({
@@ -41,14 +48,18 @@ export const userType: GraphQLObjectType<IUser, Context> = new GraphQLObjectType
     },
     userSubscribedTo: {
       type: new GraphQLList(userType),
-      resolve: async (parent: IUser, _args, { userSubscribedToLoader }: Context) => {
-        return await userSubscribedToLoader.load(parent.id);
+      resolve: async (parent: IUser, _args, { userLoader }: Context) => {
+        return await userLoader.loadMany(
+          (parent.userSubscribedTo || []).map(({ authorId }) => authorId),
+        );
       },
     },
     subscribedToUser: {
       type: new GraphQLList(userType),
-      resolve: async (parent: IUser, _args, { subscribedToUserLoader }: Context) => {
-        return await subscribedToUserLoader.load(parent.id);
+      resolve: async (parent: IUser, _args, { userLoader }: Context) => {
+        return await userLoader.loadMany(
+          (parent.subscribedToUser || []).map(({ subscriberId }) => subscriberId),
+        );
       },
     },
   }),
